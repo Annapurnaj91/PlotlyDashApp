@@ -5,6 +5,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
+import pandas as pd
 
 # Imports from this application
 from app import app
@@ -15,25 +16,39 @@ column1 = dbc.Col(
     [
         dcc.Markdown(
             """
-        
-            ## Your Value Proposition
+           ### A manager at the bank is disturbed with more and more customers leaving their credit card services. 
+           They would really appreciate it if one could predict for them who is going to get churned, 
+           so they could proactively go to the customer to provide them with better services and turn customers' decisions in the opposite direction.
 
-            Emphasize how the app will benefit users. Don't emphasize the underlying technology.
-
-            ✅ RUN is a running app that adapts to your fitness levels and designs personalized workouts to help you improve your running.
-
-            ❌ RUN is the only intelligent running app that uses sophisticated deep neural net machine learning to make your run smarter because we believe in ML driven workouts.
+            ## Is the Customer Churned?
 
             """
         ),
-        dcc.Link(dbc.Button('Your Call To Action', color='primary'), href='/predictions')
+        dcc.Link(dbc.Button('Try it out!', color='primary'), href='/predictions'),
+        dcc.Markdown(
+            """
+
+            ### For more details...
+
+            """
+        ),
+        dcc.Link(dbc.Button('Check insights', color='primary'), href='/insights'),
     ],
     md=4,
 )
 
-gapminder = px.data.gapminder()
-fig = px.scatter(gapminder.query("year==2007"), x="gdpPercap", y="lifeExp", size="pop", color="continent",
-           hover_name="country", log_x=True, size_max=60)
+# gapminder = px.data.gapminder()
+# fig = px.scatter(gapminder.query("year==2007"), x="gdpPercap", y="lifeExp", size="pop", color="continent",
+#            hover_name="country", log_x=True, size_max=60)
+df = pd.read_csv('https://raw.githubusercontent.com/Annapurnaj91/Creditcardcustomers/main/BankChurners.csv')
+fig = px.scatter(df, x="Customer_Age", y="Total_Trans_Amt", color="Attrition_Flag",
+           hover_name="Attrition_Flag", size_max=60)
+
+column2 = dbc.Col(
+    [
+        dcc.Graph(figure=fig),
+    ]
+)
 
 column2 = dbc.Col(
     [
